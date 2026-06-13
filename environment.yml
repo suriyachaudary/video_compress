@@ -1,0 +1,6 @@
+name: video_compress
+channels:
+  - defaults
+dependencies:
+  - opencv
+prefix: /home/suriya/miniconda3/envs/video_compress
