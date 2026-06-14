@@ -1,2 +1,3 @@
-### Run the scripts for a given image.
-### The image is passed as command line argument.
+/* Run the scripts for a given image.
+ The image is passed as command line argument.
+ */
