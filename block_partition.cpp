@@ -4,6 +4,7 @@ dividde image into blocks
 is greater than threshold the block is split into K blocks.
 2. Quadtree - such that if standard deviation of a block
 is greater than threshold the block is split into 4x4 blocks.
+Set threshold to 0 for lossless compression [1].
 
 Reference 
 1. https://en.wikipedia.org/wiki/Quadtree
