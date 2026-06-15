@@ -8,10 +8,33 @@
 #include "block_partition.cpp"
  
 using Eigen::MatrixXd;
+using namespace std;
 
 int main(int argc, char **argv)
 {
-	char *image_path = argv[1];
+	// from gemini
+	bool verbose = false;
+
+	char *image_path = NULL;
+	float threshold = 10;
+
+	for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg == "-h" || arg == "--help") {
+            std::cout << "Usage: " << argv[0] << " [-v | --verbose]\n"
+            <<" [-i | --image_path]\n"<<" [-t | --threshold]\n";
+            return 0;
+        } else if (arg == "-v" || arg == "--verbose") {
+            verbose = true;
+        } else if (arg == "-i" || arg == "--image_path") {
+            image_path = argv[i+1];
+        } else if (arg == "-t" || arg == "--threshold") {
+            threshold = stof(argv[i+1]);
+        }
+    }
+
+    // from gemini
+
 	printf("image path: %s\n", image_path);
 	cv::Mat img = cv::imread(image_path);
 	cv::imshow("image", img);
