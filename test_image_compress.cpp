@@ -5,6 +5,7 @@
 #include<iostream>
 #include<stdio.h>
 #include<eigen-5.0.0/Eigen/Dense>
+#include "block_partition.cpp"
  
 using Eigen::MatrixXd;
 
@@ -14,6 +15,9 @@ int main(int argc, char **argv)
 	printf("image path: %s\n", image_path);
 	cv::Mat img = cv::imread(image_path);
 	cv::imshow("image", img);
+	cv::waitKey(0);
+	Quadtree quad(&img);
+	cv::imshow("quad tree", *quad.quad_tree_image);
 	cv::waitKey(0);
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
