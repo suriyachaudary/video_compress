@@ -9,6 +9,7 @@
  
 using Eigen::MatrixXd;
 using namespace std;
+using namespace cv;
 
 int main(int argc, char **argv)
 {
@@ -36,12 +37,12 @@ int main(int argc, char **argv)
     // from gemini
 
 	printf("image path: %s\n", image_path);
-	cv::Mat img = cv::imread(image_path);
-	cv::imshow("image", img);
-	cv::waitKey(0);
+	Mat img = imread(image_path);
+	imshow("image", img);
+	waitKey(0);
 	Quadtree quad(&img);
-	cv::imshow("quad tree", quad.quad_tree_image);
-	cv::waitKey(0);
+	imshow("quad tree", quad.quad_tree_image);
+	waitKey(0);
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
   	m(1, 0) = 2.5;
