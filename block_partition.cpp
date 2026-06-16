@@ -20,6 +20,7 @@ public:
 	Scalar mean, standard_deviation;
 	float image_mean, image_std;
 	Mat quad_tree_image;
+	int level = 1;
 	//from [1]
 	Quadtree *northwest, *northeast, *southwest, *southeast;
 
@@ -28,7 +29,7 @@ public:
 		return;
 	}
 	
-	Quadtree(Mat *img)
+	Quadtree(Mat *img, int threshold)
 	{
 		meanStdDev(*img, mean, standard_deviation);
 		image_mean = (mean[0] + mean[1] + mean[2])/3;
@@ -42,9 +43,10 @@ public:
 		printf("image resolution %dx%d", img->rows, img->cols);
 		quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
 
-		if (standard_deviation > thresold)
+		if (image_std > threshold)
 		{
-			
+			line(quad_tree_image, Point(quad_tree_image.cols/2, 0.0), Point(quad_tree_image.cols/2, quad_tree_image.rows), (255/level, 255, 255));
+			line(quad_tree_image, Point(0.0, quad_tree_image.rows/2), Point(quad_tree_image.cols, quad_tree_image.rows/2), (255/level, 255, 255));
 		}
 	}
 
