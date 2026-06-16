@@ -15,7 +15,8 @@ class Quadtree{
 
 public:
 
-	cv::Mat *quad_tree_image;
+	float mean=0, stsndard_deviation=0;
+	cv::Mat quad_tree_image;
 	//from [1]
 	Quadtree *northwest, *northeast, *southwest, *southeast;
 
@@ -27,7 +28,7 @@ public:
 	Quadtree(cv::Mat *img)
 	{
 		printf("image resolution %dx%d", img->rows, img->cols);
-		quad_tree_image = img;
+		quad_tree_image = cv::Mat::zeros(img->rows, img->cols, CV_8UC3);
 	}
 
 	~Quadtree()

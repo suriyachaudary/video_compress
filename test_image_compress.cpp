@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	cv::imshow("image", img);
 	cv::waitKey(0);
 	Quadtree quad(&img);
-	cv::imshow("quad tree", *quad.quad_tree_image);
+	cv::imshow("quad tree", quad.quad_tree_image);
 	cv::waitKey(0);
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
