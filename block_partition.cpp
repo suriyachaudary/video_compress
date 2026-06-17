@@ -18,9 +18,9 @@ class Quadtree{
 public:
 
 	Scalar mean, standard_deviation;
-	float image_mean, image_std;
-	Mat quad_tree_image;
-	int level = 1;
+	float image_mean= 99999, image_std = 99999;
+	Mat quad_tree_image, temp;
+	int tree_level = 1;
 	//from [1]
 	Quadtree *northwest, *northeast, *southwest, *southeast;
 
@@ -29,13 +29,25 @@ public:
 		return;
 	}
 	
-	Quadtree(Mat *img, int threshold)
+	Quadtree(Mat *img, int threshold, int level = 1, int quad = 0)
 	{
-		meanStdDev(*img, mean, standard_deviation);
+		tree_level = level;
+		Rect roi;
+		if(quad == 0)
+		{
+			roi = Rect(0, 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+		}
+
+		if(roi.width >= 2 && roi.height >= 2)
+		{
+			Mat temp = img->clone()(roi);
+		// temp = temp(roi);
+		meanStdDev(temp, mean, standard_deviation);
 		image_mean = (mean[0] + mean[1] + mean[2])/3;
 		image_std = sqrt((standard_deviation[0]*standard_deviation[0] +
 		 standard_deviation[1]*standard_deviation[1] +
 		  standard_deviation[2]*standard_deviation[2])/3);
+	
 
 		// cout<<mean<<standard_deviation;
 		printf("mean : %f, standard deviation : %f\n", image_mean, image_std);
@@ -43,22 +55,23 @@ public:
 		printf("image resolution %dx%d\n", img->rows, img->cols);
 		quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
 
-		if (image_std > threshold && img->rows > 2 && img-> cols > 2)
+		if (image_std > threshold)
 		{
 			line(quad_tree_image, Point(quad_tree_image.cols/2, 0.0),
 			 Point(quad_tree_image.cols/2, quad_tree_image.rows),
-			  (255/level, 255, 255));
+			  Scalar(255/tree_level, 255, 255));
 			
 			line(quad_tree_image, Point(0.0, quad_tree_image.rows/2),
 			 Point(quad_tree_image.cols, quad_tree_image.rows/2),
-			  (255/level, 255, 255));
+			  Scalar(255/tree_level, 255, 255));
 
-			imshow("quad tree image", *img);
+			imshow("quad tree image", quad_tree_image);
 			waitKey(0);
-			Mat temp = img->clone();
-			temp = temp(Rect(0, 0, img->cols/2, img->rows/2));
-			northwest = new Quadtree(&temp, threshold);
+			tree_level +=1;
+			printf("tree level %d\n", tree_level);
+			northwest = new Quadtree(img, threshold, tree_level, quad = 0);
 		}
+	}
 	}
 
 	~Quadtree()
