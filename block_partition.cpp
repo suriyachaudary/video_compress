@@ -38,15 +38,26 @@ public:
 		  standard_deviation[2]*standard_deviation[2])/3);
 
 		// cout<<mean<<standard_deviation;
-		printf("mean : %f, standard deviation : %f", image_mean, image_std);
+		printf("mean : %f, standard deviation : %f\n", image_mean, image_std);
 		
-		printf("image resolution %dx%d", img->rows, img->cols);
+		printf("image resolution %dx%d\n", img->rows, img->cols);
 		quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
 
-		if (image_std > threshold)
+		if (image_std > threshold && img->rows > 2 && img-> cols > 2)
 		{
-			line(quad_tree_image, Point(quad_tree_image.cols/2, 0.0), Point(quad_tree_image.cols/2, quad_tree_image.rows), (255/level, 255, 255));
-			line(quad_tree_image, Point(0.0, quad_tree_image.rows/2), Point(quad_tree_image.cols, quad_tree_image.rows/2), (255/level, 255, 255));
+			line(quad_tree_image, Point(quad_tree_image.cols/2, 0.0),
+			 Point(quad_tree_image.cols/2, quad_tree_image.rows),
+			  (255/level, 255, 255));
+			
+			line(quad_tree_image, Point(0.0, quad_tree_image.rows/2),
+			 Point(quad_tree_image.cols, quad_tree_image.rows/2),
+			  (255/level, 255, 255));
+
+			imshow("quad tree image", *img);
+			waitKey(0);
+			Mat temp = img->clone();
+			temp = temp(Rect(0, 0, img->cols/2, img->rows/2));
+			northwest = new Quadtree(&temp, threshold);
 		}
 	}
 
