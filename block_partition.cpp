@@ -13,6 +13,7 @@ Reference
 #include<cmath>
 using namespace std;
 using namespace cv;
+
 class Quadtree{
 
 public:
@@ -29,14 +30,22 @@ public:
 		return;
 	}
 	
-	Quadtree(Mat *img, float threshold, int level = 1, int quad = 0)
+	Quadtree(Mat *img, float threshold, int level = 1, int quad = -1)
 	{
 		tree_level = level;
-		Rect roi;
-		if(quad == 0)
+		Rect roi = Rect(0, 0, img->cols, img->rows);
+		if(quad == -1)
+		{
+			quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
+		}
+		else if(quad == 0)
 		{
 			roi = Rect(0, 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
 		}
+		// else if(quad == 1)
+		// {
+			// roi = Rect(img->cols/(pow(2,level)), 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+		// }
 
 		if(roi.width >= 2 && roi.height >= 2)
 		{
@@ -53,16 +62,16 @@ public:
 		printf("mean : %f, standard deviation : %f\n", image_mean, image_std);
 		
 		printf("image resolution %dx%d\n", img->rows, img->cols);
-		quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
+
 
 		if (image_std > threshold)
 		{
-			line(quad_tree_image, Point(quad_tree_image.cols/2, 0.0),
-			 Point(quad_tree_image.cols/2, quad_tree_image.rows),
+			line(quad_tree_image(roi), Point(temp.cols/2, 0.0),
+			 Point(temp.cols/2, temp.rows),
 			  Scalar(255/tree_level, 255, 255));
 			
-			line(quad_tree_image, Point(0.0, quad_tree_image.rows/2),
-			 Point(quad_tree_image.cols, quad_tree_image.rows/2),
+			line(quad_tree_image(roi), Point(0.0, temp.rows/2),
+			 Point(temp.cols, temp.rows/2),
 			  Scalar(255/tree_level, 255, 255));
 
 			imshow("quad tree image", quad_tree_image);
@@ -70,6 +79,7 @@ public:
 			tree_level +=1;
 			printf("tree level %d\n", tree_level);
 			northwest = new Quadtree(img, threshold, tree_level, quad = 0);
+			northeast = new Quadtree(img, threshold, tree_level, quad = 1);
 		}
 	}
 	}
