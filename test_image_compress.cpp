@@ -41,6 +41,7 @@ int main(int argc, char **argv)
 	imshow("image", img);
 	waitKey(0);
 	Quadtree quad(&img, img, threshold);
+	printf("%dx%d\n", quad.quad_tree_image.rows, quad.quad_tree_image.cols);
 	imshow("quad tree", quad.quad_tree_image);
 	waitKey(0);
 	MatrixXd m(2, 2);
