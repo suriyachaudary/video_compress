@@ -29,7 +29,7 @@ public:
 		return;
 	}
 	
-	Quadtree(Mat *img, int threshold, int level = 1, int quad = 0)
+	Quadtree(Mat *img, float threshold, int level = 1, int quad = 0)
 	{
 		tree_level = level;
 		Rect roi;
