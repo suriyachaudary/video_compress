@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	Mat img = imread(image_path);
 	imshow("image", img);
 	waitKey(0);
-	Quadtree quad(&img, threshold, 1, -1);
+	Quadtree quad(&img, img, threshold);
 	imshow("quad tree", quad.quad_tree_image);
 	waitKey(0);
 	MatrixXd m(2, 2);

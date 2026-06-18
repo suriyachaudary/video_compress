@@ -30,22 +30,26 @@ public:
 		return;
 	}
 	
-	Quadtree(Mat *img, float threshold, int level = 1, int quad = -1)
+	Quadtree(Mat *img, Mat quad_tree_image, float threshold, int level = 1, int quad = -1)
 	{
 		tree_level = level;
 		Rect roi = Rect(0, 0, img->cols, img->rows);
-		if(quad == -1)
+		if(tree_level == 1)
 		{
-			quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
+			// quad_tree_image = Mat::zeros(img->rows, img->cols, CV_8UC3);
 		}
-		else if(quad == 0)
+		else
+		{
+			printf("Quad tree image resolution : %dx%d", quad_tree_image.rows, quad_tree_image.cols);
+		}
+		if(quad == 0)
 		{
 			roi = Rect(0, 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
 		}
-		// else if(quad == 1)
-		// {
-			// roi = Rect(img->cols/(pow(2,level)), 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
-		// }
+		else if(quad == 1)
+		{
+			roi = Rect(img->cols/(pow(2,level)), 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+		}
 
 		if(roi.width >= 2 && roi.height >= 2)
 		{
@@ -78,8 +82,8 @@ public:
 			waitKey(0);
 			tree_level +=1;
 			printf("tree level %d\n", tree_level);
-			northwest = new Quadtree(img, threshold, tree_level, quad = 0);
-			northeast = new Quadtree(img, threshold, tree_level, quad = 1);
+			northwest = new Quadtree(img, quad_tree_image, threshold, tree_level, quad = 0);
+			northeast = new Quadtree(img, quad_tree_image, threshold, tree_level, quad = 1);
 		}
 	}
 	}
