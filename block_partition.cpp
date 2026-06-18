@@ -38,19 +38,19 @@ public:
 
 		if(quad == 0)
 		{
-			roi = Rect(0, 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+			roi = Rect(0, 0, img->cols/2, img->rows/2);
 		}
 		else if(quad == 1)
 		{
-			roi = Rect(img->cols/(pow(2,level)), 0, img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+			roi = Rect(img->cols/2, 0, img->cols/2, img->rows/2);
 		}
 		else if(quad == 2)
 		{
-			roi = Rect(0, img->rows/(pow(2,level)), img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+			roi = Rect(0, img->rows/2, img->cols/2, img->rows/2);
 		}
 		else if(quad == 3)
 		{
-			roi = Rect(img->cols/(pow(2,level)), img->rows/(pow(2,level)), img->cols/(pow(2,level)), img->rows/(pow(2,level)));
+			roi = Rect(img->cols/2, img->rows/2, img->cols/2, img->rows/2);
 		}
 
 		if(roi.width >= 2 && roi.height >= 2)
@@ -81,7 +81,7 @@ public:
 			  Scalar(255/tree_level, 255, 255));
 
 			imshow("quad tree image", quad_tree_image);
-			waitKey(10);
+			waitKey(1);
 			tree_level +=1;
 			printf("tree level %d\n", tree_level);
 			img = &temp;
