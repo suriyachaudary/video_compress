@@ -19,8 +19,7 @@ class Quadtree{
 public:
 
 	Scalar mean, standard_deviation;
-	float image_mean= 99999, image_std = 99999;
-	Mat quad_tree_image, temp;
+	float image_mean, image_std;
 	//from [1]
 	Quadtree *northwest, *northeast, *southwest, *southeast;
 
@@ -29,9 +28,8 @@ public:
 		return;
 	}
 	
-	Quadtree(Mat *img, Mat quad_tree_image_temp, float threshold, int quad = -1)
+	Quadtree(Mat *img, float threshold, int quad = -1)
 	{
-		quad_tree_image = quad_tree_image_temp;
 		Rect roi = Rect(0, 0, img->cols, img->rows);
 
 		if(quad == 0)
@@ -51,10 +49,12 @@ public:
 			roi = Rect(img->cols/2, img->rows/2, img->cols/2, img->rows/2);
 		}
 
-		if(roi.width >= 2 && roi.height >= 2)
+		if(roi.width > 1 && roi.height > 1)
 		{
-			Mat temp = img->clone()(roi);
-			meanStdDev(temp, mean, standard_deviation);
+			Mat block = img->clone()(roi);
+			imshow("blocks", block);
+			waitKey(1);
+			meanStdDev(block, mean, standard_deviation);
 			image_mean = (mean[0] + mean[1] + mean[2])/3;
 			image_std = sqrt((standard_deviation[0]*standard_deviation[0] +
 		 					standard_deviation[1]*standard_deviation[1] +
@@ -69,20 +69,14 @@ public:
 
 			if (image_std > threshold)
 			{
-				line(quad_tree_image(roi), Point(temp.cols/2, 0.0),
-			 		Point(temp.cols/2, temp.rows),
-			  		Scalar(255, 255, 255));
-			
-				line(quad_tree_image(roi), Point(0.0, temp.rows/2),
-			 		Point(temp.cols, temp.rows/2),
-			  		Scalar(255, 255, 255));
-
-				imshow("quad tree image", quad_tree_image);
-				waitKey(1);
-				northwest = new Quadtree(&temp, quad_tree_image, threshold, quad = 0);
-				northeast = new Quadtree(&temp, quad_tree_image, threshold, quad = 1);
-				southwest = new Quadtree(&temp, quad_tree_image, threshold, quad = 2);
-				southeast = new Quadtree(&temp, quad_tree_image, threshold, quad = 3);
+				northwest = new Quadtree(&block, threshold, quad = 0);
+				northeast = new Quadtree(&block, threshold, quad = 1);
+				southwest = new Quadtree(&block, threshold, quad = 2);
+				southeast = new Quadtree(&block, threshold, quad = 3);
+			}
+			else
+			{
+				// put block for processing
 			}
 		}
 	}
