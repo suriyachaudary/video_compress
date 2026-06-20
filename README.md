@@ -12,4 +12,4 @@ Run code with
 
 
 ### Reference 
-1. https://github.com/fogleman/Quads/blob/master/main.py
+1. Michael Fogleman. [Quads](https://github.com/fogleman/Quads/). 2014.
