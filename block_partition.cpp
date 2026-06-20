@@ -6,7 +6,7 @@ is greater than threshold the block is split into K blocks.
 is greater than threshold the block is split into 2x2 blocks.
 Set threshold to 0 for lossless compression [1]. 
 Quadtree speed up processing (intersection and union) of masks [1].
-3. use weighted average [2]
+3. use weighted average [2]. Split block in order based on their standard deviation [2].
 
 Reference 
 1. https://en.wikipedia.org/wiki/Quadtree

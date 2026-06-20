@@ -9,3 +9,7 @@ Compile code with
 Run code with 
 
 ``./test_image_compression [path_to_image]``
+
+
+### Reference 
+1. https://github.com/fogleman/Quads/blob/master/main.py
