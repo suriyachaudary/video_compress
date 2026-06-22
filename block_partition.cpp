@@ -18,19 +18,35 @@ Reference
 2. https://github.com/fogleman/Quads/blob/master/main.py
 */
 #include<cmath>
+#include "image_utils.cpp"
+
 using namespace std;
 using namespace cv;
+
+struct Blocks{
+	Mat img;
+	Rect region_in_image;
+};
 
 class Quadtree2{
 	float block_mean=0, block_std_dev = 0, threshold = 10;
 	int block_width = 0, block_height = 0;
-	Mat block, coords; Rect region_in_image;
+	Mat block;
+	vector<Mat> coords;
+	Rect region_in_image;
 
-	Quadtree2()
+	vector<Blocks> get_blocks(Mat img, int quad = -1)
 	{
+		coords = create_mesh_grid(img.rows, img.cols);
+		if(quad == -1)
+		{
+			block = img;
+		}
+
 		imshow("block", block);
 		waitKey(0);
-
+		block_width = block.cols;
+		block_height = block.rows;
 		Scalar mean, standard_deviation;
 
 		meanStdDev(block, mean, standard_deviation);
