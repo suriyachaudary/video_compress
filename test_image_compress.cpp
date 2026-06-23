@@ -46,6 +46,7 @@ int main(int argc, char **argv)
 	// waitKey(0);
 
 	Quadtree2 quad;
+	quad.set_image(img, img);
 	vector<Blocks> blocks = quad.get_blocks(img);
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
