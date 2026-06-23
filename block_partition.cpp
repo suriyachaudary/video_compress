@@ -43,6 +43,8 @@ class Quadtree2{
 		if(quad == -1)
 		{
 			block = img;
+		} else if (quad == 0)
+		{
 		}
 
 		region_in_image = Rect(coords[0].at<float>(0,0) -1, coords[1].at<float>(0,0) -1,
@@ -74,6 +76,10 @@ class Quadtree2{
 			waitKey(0);
 
 			/*split the block*/
+
+			Quadtree2 northwest;
+			// vector<Blocks> northwest_blocks = northwest.get_blocks(block, 0);
+
 		}
 
 		vector<Blocks> blocks;
