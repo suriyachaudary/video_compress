@@ -34,6 +34,8 @@ class Quadtree2{
 	Mat block;
 	vector<Mat> coords;
 	Rect region_in_image;
+	
+	public:
 
 	vector<Blocks> get_blocks(Mat img, int quad = -1)
 	{
@@ -59,6 +61,9 @@ class Quadtree2{
 
 			/*split the block*/
 		}
+
+		vector<Blocks> blocks;
+		return blocks;
 	}
 };
 

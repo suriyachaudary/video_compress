@@ -1,3 +1,5 @@
+// code from gemini
+
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <numeric>
