@@ -45,6 +45,12 @@ class Quadtree2{
 			block = img;
 		}
 
+		region_in_image = Rect(coords[0].at<float>(0,0) -1, coords[1].at<float>(0,0) -1,
+		 coords[0].at<float>(coords[0].rows -1,coords[0].cols-1) -1, coords[1].at<float>(coords[1].rows-1,coords[1].cols-1)-1);
+
+
+
+
 		imshow("block", block);
 		waitKey(0);
 		block_width = block.cols;
@@ -58,6 +64,14 @@ class Quadtree2{
 	  					standard_deviation[2]*standard_deviation[2]*0.2989));
 
 		if(block_width > 4 && block_height > 4 && block_std_dev > threshold){
+
+			printf("block resolution: %dx%d at %dx%dx%dx%d, standard_deviation : %f",
+			 block_width, block_height, region_in_image.x, region_in_image.y, region_in_image.width, region_in_image.height,
+			  block_std_dev);
+
+			rectangle(img, region_in_image, mean, -1);
+			imshow("img", img);
+			waitKey(0);
 
 			/*split the block*/
 		}

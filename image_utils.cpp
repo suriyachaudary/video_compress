@@ -40,11 +40,6 @@ vector<Mat> create_mesh_grid(int rows, int cols)
     mesh.push_back(X);
     mesh.push_back(Y);
 
-    imshow("X", X/cols);
-    imshow("Y", Y/rows);
-    waitKey(0);
-
-
     return mesh;
 }
 
