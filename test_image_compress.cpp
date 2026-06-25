@@ -48,6 +48,7 @@ int main(int argc, char **argv)
 	Quadtree2 quad;
 	quad.set_image(img, img);
 	vector<Blocks> blocks = quad.get_blocks(img);
+	// cout<<blocks[0].region_in_image;
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
   	m(1, 0) = 2.5;

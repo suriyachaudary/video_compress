@@ -33,9 +33,11 @@ class Quadtree2{
 	int block_width = 0, block_height = 0;
 	Mat image, block, quad_tree_image;
 	vector<Mat> coords;
+	vector<Blocks> blocks;
 	Rect region_in_image;
 	
 	public:
+
 
 		void set_image(Mat img, Mat quad_tree_image_temp){
 			image =  img;
@@ -44,6 +46,7 @@ class Quadtree2{
 
 	vector<Blocks> get_blocks(Mat img, int quad = -1)
 	{
+		Quadtree2 northwest, northeast, southeast, southwest;
 		coords = create_mesh_grid(img.rows, img.cols);
 		if(quad == -1)
 		{
@@ -58,31 +61,31 @@ class Quadtree2{
 		}
 		 else if (quad == 1)
 		{
-			Rect quad_0_roi = Rect(img.cols/2, 0, img.cols/2, img.rows/2);
-			coords[0] = coords[0](quad_0_roi);
-			coords[1] = coords[1](quad_0_roi);
-			block = img(quad_0_roi);
+			Rect quad_1_roi = Rect(img.cols/2, 0, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_1_roi);
+			coords[1] = coords[1](quad_1_roi);
+			block = img(quad_1_roi);
 		}
 		 else if (quad == 2)
 		{
-			Rect quad_0_roi = Rect(0, img.rows/2, img.cols/2, img.rows/2);
-			coords[0] = coords[0](quad_0_roi);
-			coords[1] = coords[1](quad_0_roi);
-			block = img(quad_0_roi);
+			Rect quad_2_roi = Rect(0, img.rows/2, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_2_roi);
+			coords[1] = coords[1](quad_2_roi);
+			block = img(quad_2_roi);
 		}
 		 else if (quad == 3)
 		{
-			Rect quad_0_roi = Rect(img.cols/2, img.rows/2, img.cols/2, img.rows/2);
-			coords[0] = coords[0](quad_0_roi);
-			coords[1] = coords[1](quad_0_roi);
-			block = img(quad_0_roi);
+			Rect quad_3_roi = Rect(img.cols/2, img.rows/2, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_3_roi);
+			coords[1] = coords[1](quad_3_roi);
+			block = img(quad_3_roi);
 		}
 
-		region_in_image = Rect(coords[0].at<float>(0,0) -1, coords[1].at<float>(0,0) -1,
-		 coords[0].at<float>(coords[0].rows -1,coords[0].cols-1) -1, coords[1].at<float>(coords[1].rows-1,coords[1].cols-1)-1);
+		region_in_image = Rect(Point(coords[0].at<float>(0,0) -1, coords[1].at<float>(0,0) -1),
+		 Point(coords[0].at<float>(coords[0].rows -1,coords[0].cols-1) -1, coords[1].at<float>(coords[1].rows-1,coords[1].cols-1)-1));
 
-		imshow("block", block);
-		waitKey(1);
+		// imshow("block", block);
+		// waitKey(1);
 		block_width = block.cols;
 		block_height = block.rows;
 		Scalar mean, standard_deviation;
@@ -95,17 +98,17 @@ class Quadtree2{
 
 		if(block_width > 4 && block_height > 4 && block_std_dev > threshold){
 
-			printf("block resolution: %dx%d at %dx%dx%dx%d, standard_deviation : %f",
-			 block_width, block_height, region_in_image.x, region_in_image.y, region_in_image.width, region_in_image.height,
-			  block_std_dev);
+			// printf("block resolution: %dx%d at %dx%dx%dx%d, standard_deviation : %f",
+			 // block_width, block_height, region_in_image.x, region_in_image.y, region_in_image.width, region_in_image.height,
+			  // block_std_dev);
 
 			rectangle(quad_tree_image, region_in_image, mean, -1);
-			imshow("quad_tree_image", quad_tree_image);
-			waitKey(1);
+			// imshow("quad_tree_image", quad_tree_image);
+			// waitKey(0);
 
 			/*split the block*/
 
-			Quadtree2 northwest, northeast, southeast, southwest;
+			
 			northwest.set_image(image, quad_tree_image);
 			vector<Blocks> northwest_blocks = northwest.get_blocks(block, 0);
 
@@ -118,9 +121,21 @@ class Quadtree2{
 			southwest.set_image(image, quad_tree_image);
 			vector<Blocks> southwest_blocks = southwest.get_blocks(block, 3);
 
-		}
+		}else{
+	
+		rectangle(quad_tree_image, region_in_image, mean, -1);
+			imshow("quad_tree_image", quad_tree_image);
+			waitKey(1);
 
-		vector<Blocks> blocks;
+		imshow("block", block);
+		waitKey(1);
+	
+		// Blocks block_temp;
+		// block_temp.img = block;
+		// block_temp.region_in_image = region_in_image;
+		// blocks.push_back(block_temp);
+	}
+		// cout<<block_temp.img.rows<<block_temp.img.cols<<block_temp.region_in_image;
 		return blocks;
 	}
 };
