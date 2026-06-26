@@ -47,7 +47,11 @@ int main(int argc, char **argv)
 
 	Quadtree2 quad;
 	quad.set_image(img, img);
-	vector<Blocks> blocks = quad.get_blocks(img);
+	vector<Mat> coords;
+	vector<Blocks> blocks = quad.get_blocks(img, coords);
+	imshow("quad tree", quad.quad_tree_image);
+	imwrite("quad_tree_image.png", quad.quad_tree_image);
+	waitKey(0);
 	// cout<<blocks[0].region_in_image;
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
