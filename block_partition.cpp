@@ -46,9 +46,9 @@ class Quadtree2{
 		}
 
 		void set_threshold(float thresh, int block_width_thresh, int block_height_thresh){
-			this->threshold = thresh;
-			this->block_width_threshold = block_width_thresh;
-			this->block_height_threshold = block_height_thresh;
+			threshold = thresh;
+			block_width_threshold = block_width_thresh;
+			block_height_threshold = block_height_thresh;
 		}
 
 	vector<Blocks> get_blocks(Mat img, vector<Mat> coords, int quad = -1)
@@ -111,20 +111,21 @@ class Quadtree2{
 
 			/*split the block*/
 
-			
 			northwest.set_image(image, quad_tree_image);
-			northwest.set_threshold(threshold, block_height_threshold, block_width_threshold);
-					cout<<this->threshold<<"\t"<<block_width_threshold<<"\t"<<block_height_threshold;
+			northwest.set_threshold(threshold, block_width_threshold, block_height_threshold);
 
 			vector<Blocks> northwest_blocks = northwest.get_blocks(block, coords, 0);
 
 			northeast.set_image(image, quad_tree_image);
+			northeast.set_threshold(threshold, block_width_threshold, block_height_threshold);
 			vector<Blocks> northeast_blocks = northeast.get_blocks(block, coords, 1);
 
 			southeast.set_image(image, quad_tree_image);
+			southeast.set_threshold(threshold, block_width_threshold, block_height_threshold);
 			vector<Blocks> southeast_blocks = southeast.get_blocks(block, coords, 2);
 
 			southwest.set_image(image, quad_tree_image);
+			southwest.set_threshold(threshold, block_width_threshold, block_height_threshold);
 			vector<Blocks> southwest_blocks = southwest.get_blocks(block, coords, 3);
 
 		}else{

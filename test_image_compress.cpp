@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 
 	char *image_path = NULL;
 	float threshold = 10;
+	int block_width = 16, block_height = 16;
 
 	for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
 
 	Quadtree2 quad;
 	quad.set_image(img, 255*Mat::ones(img.rows, img.cols, CV_8UC3));
-	quad.set_threshold(threshold, 4, 4);
+	quad.set_threshold(threshold, block_width, block_height);
 	vector<Mat> coords;
 	vector<Blocks> blocks = quad.get_blocks(img, coords);
 	imshow("quad tree", quad.quad_tree_image);
