@@ -9,6 +9,10 @@ k l m n o
 p q r s t
 u v w x y
 
+Use multi threading to speed up and process all pixels in all blocks in parallel.
+
+Reference
+1. libpng
 */
 
 #include<thread>

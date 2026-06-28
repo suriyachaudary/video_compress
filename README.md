@@ -13,3 +13,4 @@ Run code with
 
 ### Reference 
 1. Michael Fogleman. [Quads](https://github.com/fogleman/Quads/). 2014.
+2. libpng (https://libpng.org/pub/png/).
