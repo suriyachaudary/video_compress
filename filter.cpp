@@ -12,8 +12,8 @@ u v w x y
 Use multi threading to speed up and process all pixels in all blocks in parallel.
 Bit desciption. Each pixel is represented by 10 bits indicating the selected line from 37 lines using 6 bits
 and cosine distance from the line in 4 bits. Another 10 bits is used for encoding residual.
-0. start processing from (2,2) onwards
-1. for each pixel do
+0. Given a block of size BxB start processing from (2,2) onwards
+1. for each pixel in the block do
 	a. find possible bases of pixel pairs from previous row and column
 	b. 
 
