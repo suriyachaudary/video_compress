@@ -47,7 +47,8 @@ int main(int argc, char **argv)
 	// waitKey(0);
 
 	Quadtree2 quad;
-	quad.set_image(img, img);
+	quad.set_image(img, 255*Mat::ones(img.rows, img.cols, CV_8UC3));
+	quad.set_threshold(threshold, 4, 4);
 	vector<Mat> coords;
 	vector<Blocks> blocks = quad.get_blocks(img, coords);
 	imshow("quad tree", quad.quad_tree_image);

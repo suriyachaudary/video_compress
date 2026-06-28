@@ -31,23 +31,30 @@ struct Blocks{
 class Quadtree2{
 	float block_mean=0, block_std_dev = 0, threshold = 10;
 	int block_width = 0, block_height = 0;
+	int block_width_threshold=4, block_height_threshold=4;
 	Mat image, block;
 	vector<Mat> coords;
 	vector<Blocks> blocks;
 	Rect region_in_image;
 	
 	public:
-Mat quad_tree_image;
+		Mat quad_tree_image;
 
 		void set_image(Mat img, Mat quad_tree_image_temp){
 			image =  img;
 			quad_tree_image = quad_tree_image_temp;
 		}
 
+		void set_threshold(float thresh, int block_width_thresh, int block_height_thresh){
+			this->threshold = thresh;
+			this->block_width_threshold = block_width_thresh;
+			this->block_height_threshold = block_height_thresh;
+		}
+
 	vector<Blocks> get_blocks(Mat img, vector<Mat> coords, int quad = -1)
 	{
 		Quadtree2 northwest, northeast, southeast, southwest;
-		// cout<<"here";
+		// cout<<threshold<<"\t"<<block_width_threshold<<"\t"<<block_height_threshold;
 		
 		if(quad == -1)
 		{
@@ -96,7 +103,7 @@ Mat quad_tree_image;
 	 					standard_deviation[1]*standard_deviation[1]*0.5870 +
 	  					standard_deviation[2]*standard_deviation[2]*0.2989));
 
-		if(block_width > 4 && block_height > 4 && block_std_dev > threshold){
+		if(block_width > block_width_threshold && block_height > block_height_threshold && block_std_dev > threshold){
 
 			// rectangle(quad_tree_image, region_in_image, mean, -1);
 			// imshow("quad_tree_image", quad_tree_image);
@@ -106,6 +113,9 @@ Mat quad_tree_image;
 
 			
 			northwest.set_image(image, quad_tree_image);
+			northwest.set_threshold(threshold, block_height_threshold, block_width_threshold);
+					cout<<this->threshold<<"\t"<<block_width_threshold<<"\t"<<block_height_threshold;
+
 			vector<Blocks> northwest_blocks = northwest.get_blocks(block, coords, 0);
 
 			northeast.set_image(image, quad_tree_image);
@@ -119,7 +129,9 @@ Mat quad_tree_image;
 
 		}else{
 	
-		rectangle(quad_tree_image, region_in_image, mean, -1, 8, 0);
+		// rectangle(quad_tree_image, region_in_image, mean, -1, 8, 0);
+			// cout<<block_width<<"\t"<<block_height<<"\t"<<block_std_dev<<"\n";
+		rectangle(quad_tree_image, region_in_image, Scalar(255,255,255), 0.01, 8, 0);
 			// imshow("quad_tree_image", quad_tree_image);
 			// waitKey(1);
 
