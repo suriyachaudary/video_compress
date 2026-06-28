@@ -56,42 +56,36 @@ Mat quad_tree_image;
 			quad_tree_image = img.clone();
 		} else if (quad == 0)
 		{
-			Rect quad_0_roi = Rect(0, 0, img.cols/2, img.rows/2);
-			coords[0] = coords[0](quad_0_roi);
-			coords[1] = coords[1](quad_0_roi);
-			block = img(quad_0_roi);
+			Rect quad_roi = Rect(0, 0, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_roi);
+			coords[1] = coords[1](quad_roi);
+			block = img(quad_roi);
 		}
 		 else if (quad == 1)
 		{
-			Rect quad_1_roi = Rect(img.cols/2, 0, img.cols/2, img.rows/2);
-			// imshow("x",coords[0]/coords[0].cols);
-			// waitKey(0);
-			coords[0] = coords[0](quad_1_roi);
-			// imshow("x", coords[0]/coords[0].cols);
-			// waitKey(0);
-			coords[1] = coords[1](quad_1_roi);
-			block = img(quad_1_roi);
+			Rect quad_roi = Rect(img.cols/2, 0, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_roi);
+			coords[1] = coords[1](quad_roi);
+			block = img(quad_roi);
 		}
 		 else if (quad == 2)
 		{
-			Rect quad_2_roi = Rect(0, img.rows/2, img.cols/2, img.rows/2);
-			coords[0] = coords[0](quad_2_roi);
-			coords[1] = coords[1](quad_2_roi);
-			block = img(quad_2_roi);
+			Rect quad_roi = Rect(0, img.rows/2, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_roi);
+			coords[1] = coords[1](quad_roi);
+			block = img(quad_roi);
 		}
 		 else if (quad == 3)
 		{
-			Rect quad_3_roi = Rect(img.cols/2, img.rows/2, img.cols/2, img.rows/2);
-			coords[0] = coords[0](quad_3_roi);
-			coords[1] = coords[1](quad_3_roi);
-			block = img(quad_3_roi);
+			Rect quad_roi = Rect(img.cols/2, img.rows/2, img.cols/2, img.rows/2);
+			coords[0] = coords[0](quad_roi);
+			coords[1] = coords[1](quad_roi);
+			block = img(quad_roi);
 		}
 
 
 		region_in_image = Rect(Point(coords[0].at<float>(0,0) -1, coords[1].at<float>(0,0) -1),
 		 Point(coords[0].at<float>(coords[0].rows -1,coords[0].cols-1)-1, coords[1].at<float>(coords[1].rows-1,coords[1].cols-1)-1));
-		// imshow("block", block);
-		// waitKey(1);
 		block_width = block.cols;
 		block_height = block.rows;
 		Scalar mean, standard_deviation;
@@ -104,11 +98,7 @@ Mat quad_tree_image;
 
 		if(block_width > 4 && block_height > 4 && block_std_dev > threshold){
 
-			// printf("block resolution: %dx%d at %dx%dx%dx%d, standard_deviation : %f",
-			 // block_width, block_height, region_in_image.x, region_in_image.y, region_in_image.width, region_in_image.height,
-			  // block_std_dev);
-
-			rectangle(quad_tree_image, region_in_image, mean, -1);
+			// rectangle(quad_tree_image, region_in_image, mean, -1);
 			// imshow("quad_tree_image", quad_tree_image);
 			// waitKey(1);
 
@@ -129,9 +119,9 @@ Mat quad_tree_image;
 
 		}else{
 	
-		// rectangle(quad_tree_image, region_in_image, mean, -1);
-		// 	imshow("quad_tree_image", quad_tree_image);
-		// 	waitKey(1);
+		rectangle(quad_tree_image, region_in_image, mean, -1, 8, 0);
+			imshow("quad_tree_image", quad_tree_image);
+			waitKey(1);
 
 		// imshow("block", block);
 		// waitKey(1);
