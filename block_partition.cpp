@@ -120,8 +120,8 @@ Mat quad_tree_image;
 		}else{
 	
 		rectangle(quad_tree_image, region_in_image, mean, -1, 8, 0);
-			imshow("quad_tree_image", quad_tree_image);
-			waitKey(1);
+			// imshow("quad_tree_image", quad_tree_image);
+			// waitKey(1);
 
 		// imshow("block", block);
 		// waitKey(1);

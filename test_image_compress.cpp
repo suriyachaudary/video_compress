@@ -6,6 +6,7 @@
 #include<stdio.h>
 #include<eigen-5.0.0/Eigen/Dense>
 #include "block_partition.cpp"
+#include "filter.cpp"
  
 using Eigen::MatrixXd;
 using namespace std;
