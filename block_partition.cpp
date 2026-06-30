@@ -132,7 +132,7 @@ class Quadtree2{
 	
 		// rectangle(quad_tree_image, region_in_image, mean, -1, 8, 0);
 			// cout<<block_width<<"\t"<<block_height<<"\t"<<block_std_dev<<"\n";
-		rectangle(quad_tree_image, region_in_image, Scalar(255,255,255), 0.01, 8, 0);
+		rectangle(quad_tree_image, region_in_image, Scalar(255,255,255), 0.01);
 			// imshow("quad_tree_image", quad_tree_image);
 			// waitKey(1);
 
