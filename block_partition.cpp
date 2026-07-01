@@ -54,7 +54,6 @@ class Quadtree2{
 	vector<Blocks> get_blocks(Mat img, vector<Mat> coords, int quad = -1)
 	{
 		Quadtree2 northwest, northeast, southeast, southwest;
-		// cout<<threshold<<"\t"<<block_width_threshold<<"\t"<<block_height_threshold;
 		
 		if(quad == -1)
 		{
@@ -106,14 +105,11 @@ class Quadtree2{
 		if(block_width > block_width_threshold && block_height > block_height_threshold && block_std_dev > threshold){
 
 			// rectangle(quad_tree_image, region_in_image, mean, -1);
-			// imshow("quad_tree_image", quad_tree_image);
-			// waitKey(1);
 
 			/*split the block*/
 
 			northwest.set_image(image, quad_tree_image);
 			northwest.set_threshold(threshold, block_width_threshold, block_height_threshold);
-
 			vector<Blocks> northwest_blocks = northwest.get_blocks(block, coords, 0);
 
 			northeast.set_image(image, quad_tree_image);
@@ -128,23 +124,22 @@ class Quadtree2{
 			southwest.set_threshold(threshold, block_width_threshold, block_height_threshold);
 			vector<Blocks> southwest_blocks = southwest.get_blocks(block, coords, 3);
 
+			blocks.insert(blocks.end(), northwest_blocks.begin(), northwest_blocks.end());
+			blocks.insert(blocks.end(), northeast_blocks.begin(), northeast_blocks.end());
+			blocks.insert(blocks.end(), southeast_blocks.begin(), southeast_blocks.end());
+			blocks.insert(blocks.end(), southwest_blocks.begin(), southwest_blocks.end());
+
 		}else{
 	
-		// rectangle(quad_tree_image, region_in_image, mean, -1, 8, 0);
-			// cout<<block_width<<"\t"<<block_height<<"\t"<<block_std_dev<<"\n";
 		rectangle(quad_tree_image, region_in_image, Scalar(255,255,255), 0.01);
-			// imshow("quad_tree_image", quad_tree_image);
-			// waitKey(1);
-
-		// imshow("block", block);
-		// waitKey(1);
-	
-		// Blocks block_temp;
-		// block_temp.img = block;
-		// block_temp.region_in_image = region_in_image;
-		// blocks.push_back(block_temp);
+		
+		Blocks block_temp;
+		block_temp.img = block;
+		block_temp.region_in_image = region_in_image;
+		blocks.push_back(block_temp);
+		
+		cout<<blocks.size()<<"\n";
 	}
-		// cout<<block_temp.img.rows<<block_temp.img.cols<<block_temp.region_in_image;
 		return blocks;
 	}
 };

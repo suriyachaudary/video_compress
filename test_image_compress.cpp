@@ -55,7 +55,11 @@ int main(int argc, char **argv)
 	imshow("quad tree", quad.quad_tree_image);
 	imwrite("quad_tree_image.png", quad.quad_tree_image);
 	waitKey(0);
-	// cout<<blocks[0].region_in_image;
+	cout<<"Number of blocks to process "<<blocks.size()<<"\n";
+	rectangle(quad.quad_tree_image, blocks[10].region_in_image, Scalar(255, 0, 0), -1);
+	imshow("blocks",blocks[10].img);
+	imshow("quad tree", quad.quad_tree_image);
+	waitKey(0);
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
   	m(1, 0) = 2.5;

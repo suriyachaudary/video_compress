@@ -25,9 +25,10 @@ Reference
 #include<thread>
 #include<eigen-5.0.0/Eigen/Dense>
 
-vetor<int> find_basis(vector<vector<int>> bases, vector<int> value)
+vector<int> find_basis(vector<int> base, vector<int> value)
 {
-	
+	vector<int> result;
+	return result;
 }
 
 void filter(Blocks block)
