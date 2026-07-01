@@ -34,6 +34,9 @@ struct Results{
 void find_basis(vector<vector<int>> bases, vector<int> value, int y, int x, vector<Results> *results)
 {
 	Results res;
+	res.x = x;
+	res.y = y;
+	res.value = 0;
 	results->push_back(res);
 }
 
