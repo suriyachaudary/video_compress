@@ -31,7 +31,7 @@ struct Results{
 	int value;
 };
 
-void find_basis(vector<vector<int>> bases, vector<int> value, int y, int x, vector<Results> *results)
+void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 {
 	Results res;
 	res.x = x;
@@ -58,7 +58,11 @@ void filter(Blocks block)
 	{
 		for(int j= 1;j<block.img.cols; j++)
 		{
-			workers.push_back(thread(find_basis, bases, value, i, j, &results));
+			Vec3b value = block.img.at<Vec3b>(i,j);
+			// value.push_back(block.img.at<Vec3b>(i,j)[0]);
+			// value.push_back(block.img.at<Vec3b>(i,j)[1]);
+			// value.push_back(block.img.at<Vec3b>(i,j)[2]);
+			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results));
 			
 		}
 	}
