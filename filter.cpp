@@ -39,16 +39,39 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 	res.value = 0;
 
 	// 4 bits for position on the line
-	float alpha = 1.0/pow(2, 4);
-
-	vector<float> distances;
+	float alpha_step = 1.0/pow(2, 4);
+	float min_dist = numeric_limits<float>::max();
+	float min_dist_alpha;
+	int min_row_1, min_col_1;
+	int min_row_2, min_col_2;
 	for(int i=y-1, j=x-1;j<img->cols;j++)
 	{
 		for(int k=y, l=x-1;k<img->rows;k++)
 		{
-			
+			for(float alpha = 0; alpha<=1; alpha+=alpha_step)
+			{
+				// cout<<'('<<i<<" "<<j<<")\t, ("<<k<<" "<<l<<")\t, ("<<y<<" "<< x<<')'<<"\n";
+				Vec3b a, b;
+				a = img->at<Vec3b>(i,j);
+				b = img->at<Vec3b>(k,l);
+				float dist = sqrt(pow((value[0] - alpha*a[0] + (1-alpha)*b[0]), 2)
+							+ pow((value[1] - alpha*a[1] + (1-alpha)*b[1]), 2)
+							+ pow((value[2] - alpha*a[2] + (1-alpha)*b[2]), 2));
+				if(dist <= min_dist)
+				{	
+					min_dist = dist;
+					min_dist_alpha = alpha;
+					min_row_1 = i;
+					min_col_1 = j;
+					min_row_2 = k;
+					min_col_2 = l;
+				}
+			}
+
 		}
 	}
+
+	cout<<"Min dist "<<min_dist<<" min alpha "<< min_dist_alpha<<" at "<<min_row_1<<", "<<min_col_1<< " and "<<min_row_2<<", "<<min_col_2 <<" for "<<y <<", "<< x<<"\n";
 
 	results->push_back(res);
 }
@@ -71,8 +94,8 @@ void filter(Blocks block)
 		{
 			Vec3b value = block.img.at<Vec3b>(i,j);
 			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results));
-			
-		}
+			break;
+		} break;
 	}
 
 	for(auto& w : workers)
