@@ -37,13 +37,24 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 	res.x = x;
 	res.y = y;
 	res.value = 0;
+
+	// 4 bits for position on the line
+	float alpha = 1.0/pow(2, 4);
+
+	vector<float> distances;
+	for(int i=y-1, j=x-1;j<img->cols;j++)
+	{
+		for(int k=y, l=x-1;k<img->rows;k++)
+		{
+			
+		}
+	}
+
 	results->push_back(res);
 }
 
 void filter(Blocks block)
 {	
-	vector<vector<int>> bases;
-	vector<int> value;
 	vector<Results> results;
 	vector<thread> workers;
 
@@ -59,9 +70,6 @@ void filter(Blocks block)
 		for(int j= 1;j<block.img.cols; j++)
 		{
 			Vec3b value = block.img.at<Vec3b>(i,j);
-			// value.push_back(block.img.at<Vec3b>(i,j)[0]);
-			// value.push_back(block.img.at<Vec3b>(i,j)[1]);
-			// value.push_back(block.img.at<Vec3b>(i,j)[2]);
 			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results));
 			
 		}
