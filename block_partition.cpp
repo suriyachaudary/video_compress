@@ -137,8 +137,6 @@ class Quadtree2{
 		block_temp.img = block;
 		block_temp.region_in_image = region_in_image;
 		blocks.push_back(block_temp);
-		
-		cout<<blocks.size()<<"\n";
 	}
 		return blocks;
 	}

@@ -20,18 +20,53 @@ How to discard potential bases in large blocks? What distance function to use?
 
 Reference
 1. libpng
+2. https://www.youtube.com/watch?v=kfLE57ljoEE&t=15
 */
 
 #include<thread>
 #include<eigen-5.0.0/Eigen/Dense>
 
-vector<int> find_basis(vector<int> base, vector<int> value)
+struct Results{
+	int x, y;
+	int value;
+};
+
+void find_basis(vector<vector<int>> bases, vector<int> value, int y, int x, vector<Results> *results)
 {
-	vector<int> result;
-	return result;
+	Results res;
+	results->push_back(res);
 }
 
 void filter(Blocks block)
-{
+{	
+	vector<vector<int>> bases;
+	vector<int> value;
+	vector<Results> results;
+	vector<thread> workers;
 
+	int num_threads = thread::hardware_concurrency();
+	cout<<"Number of possible threads "<<num_threads<<"\n";
+
+	cout<<"Block resolution "<<block.img.rows<<"x"<<block.img.cols<<"\n";
+	cout<<"Number of pixels to process "<<(block.img.rows-1)*(block.img.cols-1)<<"\n";
+
+	// start from (2,2)
+	for(int i=1;i<block.img.rows; i++)
+	{
+		for(int j= 1;j<block.img.cols; j++)
+		{
+			workers.push_back(thread(find_basis, bases, value, i, j, &results));
+			
+		}
+	}
+
+	for(auto& w : workers)
+	{
+		if(w.joinable())
+		{
+			w.join();
+		}
+	}
+
+	cout<<"Number of pixels processed "<<results.size()<<"\n";
 }
