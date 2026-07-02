@@ -23,6 +23,7 @@ Reference
 2. https://www.youtube.com/watch?v=kfLE57ljoEE&t=15
 */
 
+#include<cmath>
 #include<thread>
 #include<eigen-5.0.0/Eigen/Dense>
 
@@ -57,7 +58,9 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 				float dist = sqrt(pow((value[0] - alpha*a[0] + (1-alpha)*b[0]), 2)
 							+ pow((value[1] - alpha*a[1] + (1-alpha)*b[1]), 2)
 							+ pow((value[2] - alpha*a[2] + (1-alpha)*b[2]), 2));
-				if(dist <= min_dist)
+
+				
+				if(dist < min_dist)
 				{	
 					min_dist = dist;
 					min_dist_alpha = alpha;
@@ -65,13 +68,15 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 					min_col_1 = j;
 					min_row_2 = k;
 					min_col_2 = l;
+
+					// cout<<"Angle = "<<atan2((k-i), (l-j));
 				}
 			}
 
 		}
 	}
 
-	cout<<"Min dist "<<min_dist<<" min alpha "<< min_dist_alpha<<" at "<<min_row_1<<", "<<min_col_1<< " and "<<min_row_2<<", "<<min_col_2 <<" for "<<y <<", "<< x<<"\n";
+	// cout<<"Min dist "<<min_dist<<" min alpha "<< min_dist_alpha<<" at "<<min_row_1<<", "<<min_col_1<< " and "<<min_row_2<<", "<<min_col_2 <<" for "<<y <<", "<< x<<"\n";
 
 	results->push_back(res);
 }
@@ -94,8 +99,9 @@ void filter(Blocks block)
 		{
 			Vec3b value = block.img.at<Vec3b>(i,j);
 			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results));
-			break;
-		} break;
+			// break;
+		}
+		 // break;
 	}
 
 	for(auto& w : workers)
