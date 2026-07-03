@@ -70,9 +70,13 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 					res.min_row_2 = k;
 					res.min_col_2 = l;
 
+					res.value = atan2((k-i), (l-j));
+
 					new_img->at<Vec3b>(y, x)[0] = alpha*a[0] + (1-alpha)*b[0];
 					new_img->at<Vec3b>(y, x)[1] = alpha*a[1] + (1-alpha)*b[1];
 					new_img->at<Vec3b>(y, x)[2] = alpha*a[2] + (1-alpha)*b[2];
+
+
 
 					// cout<<"Angle = "<<atan2((k-i), (l-j));
 				}
@@ -121,6 +125,8 @@ void filter(Blocks block)
 
 	imshow("img", block.img);
 	imshow("new_img", new_img);
+	imwrite("block_img.png", block.img);
+	imwrite("block_img_after_filter.png", new_img);
 	waitKey(0);
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
