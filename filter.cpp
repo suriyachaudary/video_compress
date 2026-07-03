@@ -29,10 +29,13 @@ Reference
 
 struct Results{
 	int x, y;
+	int min_row_1, min_col_1;
+	int min_row_2, min_col_2;
+	float min_dist_alpha;
 	int value;
 };
 
-void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
+void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img)
 {
 	Results res;
 	res.x = x;
@@ -42,9 +45,7 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 	// 4 bits for position on the line
 	float alpha_step = 1.0/pow(2, 4);
 	float min_dist = numeric_limits<float>::max();
-	float min_dist_alpha;
-	int min_row_1, min_col_1;
-	int min_row_2, min_col_2;
+	
 	for(int i=y-1, j=x-1;j<img->cols;j++)
 	{
 		for(int k=y, l=x-1;k<img->rows;k++)
@@ -63,11 +64,15 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results)
 				if(dist < min_dist)
 				{	
 					min_dist = dist;
-					min_dist_alpha = alpha;
-					min_row_1 = i;
-					min_col_1 = j;
-					min_row_2 = k;
-					min_col_2 = l;
+					res.min_dist_alpha = alpha;
+					res.min_row_1 = i;
+					res.min_col_1 = j;
+					res.min_row_2 = k;
+					res.min_col_2 = l;
+
+					new_img->at<Vec3b>(y, x)[0] = alpha*a[0] + (1-alpha)*b[0];
+					new_img->at<Vec3b>(y, x)[1] = alpha*a[1] + (1-alpha)*b[1];
+					new_img->at<Vec3b>(y, x)[2] = alpha*a[2] + (1-alpha)*b[2];
 
 					// cout<<"Angle = "<<atan2((k-i), (l-j));
 				}
@@ -86,6 +91,8 @@ void filter(Blocks block)
 	vector<Results> results;
 	vector<thread> workers;
 
+	Mat new_img = block.img.clone();
+
 	int num_threads = thread::hardware_concurrency();
 	cout<<"Number of possible threads "<<num_threads<<"\n";
 
@@ -98,7 +105,7 @@ void filter(Blocks block)
 		for(int j= 1;j<block.img.cols; j++)
 		{
 			Vec3b value = block.img.at<Vec3b>(i,j);
-			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results));
+			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results, &new_img));
 			// break;
 		}
 		 // break;
@@ -111,6 +118,10 @@ void filter(Blocks block)
 			w.join();
 		}
 	}
+
+	imshow("img", block.img);
+	imshow("new_img", new_img);
+	waitKey(0);
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
 }
