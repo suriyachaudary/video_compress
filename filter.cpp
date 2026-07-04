@@ -32,7 +32,7 @@ struct Results{
 	int x, y;
 	int min_row_1, min_col_1;
 	int min_row_2, min_col_2;
-	float min_dist_alpha;
+	float min_dist_alpha, min_dist;
 	float value;
 };
 
@@ -60,12 +60,13 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 				b = img->at<Vec3b>(k,l);
 				float dist = sqrt(pow((value[0] - alpha*a[0] + (1-alpha)*b[0]), 2)
 							+ pow((value[1] - alpha*a[1] + (1-alpha)*b[1]), 2)
-							+ pow((value[2] - alpha*a[2] + (1-alpha)*b[2]), 2));
+							+ pow((value[2] - alpha*a[2] + (1-alpha)*b[2]), 2))/3;
 
 				
 				if(dist < min_dist)
 				{	
 					min_dist = dist;
+					res.min_dist = min_dist;
 					res.min_dist_alpha = alpha;
 					res.min_row_1 = i;
 					res.min_col_1 = j;
@@ -79,7 +80,6 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 					new_img->at<Vec3b>(y, x)[2] = alpha*a[2] + (1-alpha)*b[2];
 				}
 			}
-
 		}
 	}
 
@@ -91,14 +91,14 @@ void defilter(Results result, Blocks *block, int *count)
 	Vec3b a, b;
 	a = block->img.at<Vec3b>(result.min_row_1, result.min_col_1);
 	b = block->img.at<Vec3b>(result.min_row_2, result.min_col_2);
-	block->img.at<Vec3b>(result.y, result.x)[0] = result.min_dist_alpha*a[0] + (1-result.min_dist_alpha)*b[0];
-	block->img.at<Vec3b>(result.y, result.x)[1] = result.min_dist_alpha*a[1] + (1-result.min_dist_alpha)*b[1];
-	block->img.at<Vec3b>(result.y, result.x)[2] = result.min_dist_alpha*a[2] + (1-result.min_dist_alpha)*b[2];
+	block->img.at<Vec3b>(result.y, result.x)[0] = result.min_dist + result.min_dist_alpha*a[0] + (1-result.min_dist_alpha)*b[0];
+	block->img.at<Vec3b>(result.y, result.x)[1] = result.min_dist + result.min_dist_alpha*a[1] + (1-result.min_dist_alpha)*b[1];
+	block->img.at<Vec3b>(result.y, result.x)[2] = result.min_dist + result.min_dist_alpha*a[2] + (1-result.min_dist_alpha)*b[2];
 
 	*count = *count+1;
 }
 
-void filter(Blocks block)
+vector<Results> filter(Blocks block)
 {	
 	vector<Results> results;
 	vector<thread> workers;
@@ -142,6 +142,7 @@ void filter(Blocks block)
 	Blocks reconstruct;
 	int count = 0;
 	reconstruct.img = Mat::zeros(results[0].rows, results[0].cols, CV_8UC3);
+	reconstruct.region_in_image = block.region_in_image;
 
 
 	// start from (1,1)
@@ -156,6 +157,8 @@ void filter(Blocks block)
 			}
 		}
 	}
+
+	// reconstruct all pixels in the block concurrently.
 
 	for(int i=0;i<results.size();i++)
 	{
@@ -176,5 +179,5 @@ void filter(Blocks block)
 	imshow("reconstruct block", reconstruct.img);
 	waitKey(0);
 
-	
+	return results;
 }

@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 	imwrite("quad_tree_image.png", quad.quad_tree_image);
 	waitKey(0);
 	
-	filter(blocks[54]);
+	vector<Results> results = filter(blocks[54]);
 
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
