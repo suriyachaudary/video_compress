@@ -55,7 +55,6 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 		{
 			for(float alpha = 0; alpha<=1; alpha+=alpha_step)
 			{
-				// cout<<'('<<i<<" "<<j<<")\t, ("<<k<<" "<<l<<")\t, ("<<y<<" "<< x<<')'<<"\n";
 				Vec3b a, b;
 				a = img->at<Vec3b>(i,j);
 				b = img->at<Vec3b>(k,l);
@@ -87,7 +86,7 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	results->push_back(res);
 }
 
-void defilter(Results result, Blocks *block)
+void defilter(Results result, Blocks *block, int *count)
 {
 	Vec3b a, b;
 	a = block->img.at<Vec3b>(result.min_row_1, result.min_col_1);
@@ -95,6 +94,8 @@ void defilter(Results result, Blocks *block)
 	block->img.at<Vec3b>(result.y, result.x)[0] = result.min_dist_alpha*a[0] + (1-result.min_dist_alpha)*b[0];
 	block->img.at<Vec3b>(result.y, result.x)[1] = result.min_dist_alpha*a[1] + (1-result.min_dist_alpha)*b[1];
 	block->img.at<Vec3b>(result.y, result.x)[2] = result.min_dist_alpha*a[2] + (1-result.min_dist_alpha)*b[2];
+
+	*count = *count+1;
 }
 
 void filter(Blocks block)
@@ -130,6 +131,8 @@ void filter(Blocks block)
 		}
 	}
 
+	cout<<"Number of pixels processed "<<results.size()<<"\n";
+
 	imshow("img", block.img);
 	imshow("new_img", new_img);
 	imwrite("block_img.png", block.img);
@@ -137,6 +140,7 @@ void filter(Blocks block)
 	waitKey(0);
 
 	Blocks reconstruct;
+	int count = 0;
 	reconstruct.img = Mat::zeros(results[0].rows, results[0].cols, CV_8UC3);
 
 
@@ -155,7 +159,7 @@ void filter(Blocks block)
 
 	for(int i=0;i<results.size();i++)
 	{
-		workers.push_back(thread(defilter, results[i], &reconstruct));
+		workers.push_back(thread(defilter, results[i], &reconstruct, &count));
 	}
 
 	for(auto& w : workers)
@@ -166,9 +170,11 @@ void filter(Blocks block)
 		}
 	}
 
+	cout<<"Number of pixels reconstructed "<<count<<"\n";
+
 
 	imshow("reconstruct block", reconstruct.img);
 	waitKey(0);
 
-	cout<<"Number of pixels processed "<<results.size()<<"\n";
+	
 }
