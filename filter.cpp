@@ -28,16 +28,19 @@ Reference
 #include<eigen-5.0.0/Eigen/Dense>
 
 struct Results{
+	int rows, cols;
 	int x, y;
 	int min_row_1, min_col_1;
 	int min_row_2, min_col_2;
 	float min_dist_alpha;
-	int value;
+	float value;
 };
 
 void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img)
 {
 	Results res;
+	res.rows =  img->rows;
+	res.cols = img->cols;
 	res.x = x;
 	res.y = y;
 	res.value = 0;
@@ -75,19 +78,18 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 					new_img->at<Vec3b>(y, x)[0] = alpha*a[0] + (1-alpha)*b[0];
 					new_img->at<Vec3b>(y, x)[1] = alpha*a[1] + (1-alpha)*b[1];
 					new_img->at<Vec3b>(y, x)[2] = alpha*a[2] + (1-alpha)*b[2];
-
-
-
-					// cout<<"Angle = "<<atan2((k-i), (l-j));
 				}
 			}
 
 		}
 	}
 
-	// cout<<"Min dist "<<min_dist<<" min alpha "<< min_dist_alpha<<" at "<<min_row_1<<", "<<min_col_1<< " and "<<min_row_2<<", "<<min_col_2 <<" for "<<y <<", "<< x<<"\n";
-
 	results->push_back(res);
+}
+
+void defilter(vector<Results> results, Blocks *block)
+{
+
 }
 
 void filter(Blocks block)
@@ -127,6 +129,40 @@ void filter(Blocks block)
 	imshow("new_img", new_img);
 	imwrite("block_img.png", block.img);
 	imwrite("block_img_after_filter.png", new_img);
+	waitKey(0);
+
+	Blocks reconstruct;
+	reconstruct.img = Mat::zeros(results[0].rows, results[0].cols, CV_8UC3);
+
+
+	// start from (1,1)
+	for(int i=0;i<block.img.rows; i++)
+	{
+		for(int j= 0;j<block.img.cols; j++)
+		{
+			Vec3b value = block.img.at<Vec3b>(i,j);
+			if(i==0 || j ==  0)
+			{
+				reconstruct.img.at<Vec3b>(i, j) = value;
+			}
+		}
+	}
+
+	for(int i=0;i<results.size();i++)
+	{
+		workers.push_back(thread(defilter, results, &reconstruct));
+	}
+
+	for(auto& w : workers)
+	{
+		if(w.joinable())
+		{
+			w.join();
+		}
+	}
+
+
+	imshow("reconstruct block", reconstruct.img);
 	waitKey(0);
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
