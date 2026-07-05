@@ -35,8 +35,9 @@ void arithmatic_code(vector<Results> result)
 
     compressed_stream.seekg(0); 
     compressor.decompress(compressed_stream, decompressed_stream);
+    std::cout << "Decompressed size: " << decompressed_stream.str().size() << " bytes\n";
 
-    vector<char> vec(decompressed_stream.str().begin(), decompressed_stream.str().end());
+    vector<char> vec(decompressed_stream.str().size());
 
     // 3. Convert back to vector of structures (Deserialization)
     size_t num_elements = vec.size() / sizeof(Results);

@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 	
 	vector<Results> results = filter(blocks[54]);
 
-	// arithmatic_code(results);
+	arithmatic_code(results);
 
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
