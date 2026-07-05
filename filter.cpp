@@ -157,27 +157,49 @@ vector<Results> filter(Blocks block)
 			}
 		}
 	}
-
-	// reconstruct all pixels in the block concurrently.
-
-	for(int i=0;i<results.size();i++)
+	for(int i=0;i<block.img.rows; i++)
 	{
-		workers.push_back(thread(defilter, results[i], &reconstruct, &count));
-	}
-
-	for(auto& w : workers)
-	{
-		if(w.joinable())
+		for(int j= 0;j<block.img.cols; j++)
 		{
-			w.join();
+			Vec3b value = block.img.at<Vec3b>(i,j);
+			if(i==0 || j ==  0)
+			{
+				continue;
+			}
+			else
+			{
+				for(int k=0;k<results.size();k++)
+				{
+					if(results[k].x==j && results[k].y == i)
+					{
+						defilter(results[k], &reconstruct, &count);
+					}
+				}
+				
+			}
 		}
 	}
 
+	// reconstruct all pixels in the block concurrently.
+
+	// for(int i=0;i<results.size();i++)
+	// {
+		// workers.push_back(thread(defilter, results[i], &reconstruct, &count));
+	// }
+
+	// for(auto& w : workers)
+	// {
+		// if(w.joinable())
+		// {
+			// w.join();
+		// }
+	// }
+
 	cout<<"Number of pixels reconstructed "<<count<<"\n";
 
-
 	imwrite("reconstructed_block.png", reconstruct.img);
-	// waitKey(0);
+	imshow("reconstructed_block.png", reconstruct.img);
+	waitKey(0);
 
 	return results;
 }
