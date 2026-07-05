@@ -141,9 +141,9 @@ vector<Results> filter(Blocks block)
 	imwrite("block_img_after_filter.png", new_img);
 	waitKey(0);
 
-	/*Blocks reconstruct;
+	Blocks reconstruct;
 	int count = 0;
-	reconstruct.img = Mat::zeros(results[0].rows, results[0].cols, CV_8UC3);
+	reconstruct.img = Mat::zeros(block.img.rows, block.img.cols, CV_8UC3);
 	reconstruct.region_in_image = block.region_in_image;
 
 
@@ -159,25 +159,16 @@ vector<Results> filter(Blocks block)
 			}
 		}
 	}
-	for(int i=0;i<block.img.rows; i++)
+	for(int i=1;i<block.img.rows; i++)
 	{
-		for(int j= 0;j<block.img.cols; j++)
+		for(int j= 1;j<block.img.cols; j++)
 		{
-			Vec3b value = block.img.at<Vec3b>(i,j);
-			if(i==0 || j ==  0)
+			for(int k=0;k<results.size();k++)
 			{
-				continue;
-			}
-			else
-			{
-				for(int k=0;k<results.size();k++)
+				if(results[k].x==j && results[k].y == i)
 				{
-					if(results[k].x==j && results[k].y == i)
-					{
-						defilter(results[k], &reconstruct, &count);
-					}
+					defilter(results[k], &reconstruct, &count);
 				}
-				
 			}
 		}
 	}
@@ -202,6 +193,6 @@ vector<Results> filter(Blocks block)
 	imwrite("reconstructed_block.png", reconstruct.img);
 	imshow("reconstructed_block.png", reconstruct.img);
 	waitKey(0);
-*/
+
 	return results;
 }
