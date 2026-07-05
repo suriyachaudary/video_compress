@@ -134,8 +134,8 @@ vector<Results> filter(Blocks block)
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
 
-	imshow("img", block.img);
-	imshow("new_img", new_img);
+	// imshow("img", block.img);
+	// imshow("new_img", new_img);
 	imwrite("block_img.png", block.img);
 	imwrite("block_img_after_filter.png", new_img);
 	// waitKey(0);
