@@ -36,7 +36,7 @@ struct Results{
 	float value;
 };
 
-void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img)
+void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img, int *filter_count)
 {
 	Results res;
 	res.rows =  img->rows;
@@ -83,7 +83,7 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 		}
 	}
 
-	results->push_back(res);
+	results->at(*filter_count) = res;
 }
 
 void defilter(Results result, Blocks *block, int *count)
@@ -101,7 +101,7 @@ void defilter(Results result, Blocks *block, int *count)
 
 vector<Results> filter(Blocks block)
 {	
-	vector<Results> results;
+	vector<Results> results((block.img.rows-1)*(block.img.cols-1));
 	vector<thread> workers;
 
 	Mat new_img = block.img.clone();
@@ -112,13 +112,14 @@ vector<Results> filter(Blocks block)
 	cout<<"Block resolution "<<block.img.rows<<"x"<<block.img.cols<<"\n";
 	cout<<"Number of pixels to process "<<(block.img.rows-1)*(block.img.cols-1)<<"\n";
 
+	int filter_count = 0;
 	// start from (2,2)
 	for(int i=1;i<block.img.rows; i++)
 	{
 		for(int j= 1;j<block.img.cols; j++)
 		{
 			Vec3b value = block.img.at<Vec3b>(i,j);
-			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results, &new_img));
+			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results, &new_img, &filter_count));
 			// break;
 		}
 		 // break;
@@ -134,13 +135,13 @@ vector<Results> filter(Blocks block)
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
 
-	// imshow("img", block.img);
-	// imshow("new_img", new_img);
+	imshow("img", block.img);
+	imshow("new_img", new_img);
 	imwrite("block_img.png", block.img);
 	imwrite("block_img_after_filter.png", new_img);
-	// waitKey(0);
+	waitKey(0);
 
-	Blocks reconstruct;
+	/*Blocks reconstruct;
 	int count = 0;
 	reconstruct.img = Mat::zeros(results[0].rows, results[0].cols, CV_8UC3);
 	reconstruct.region_in_image = block.region_in_image;
@@ -201,6 +202,6 @@ vector<Results> filter(Blocks block)
 	imwrite("reconstructed_block.png", reconstruct.img);
 	imshow("reconstructed_block.png", reconstruct.img);
 	waitKey(0);
-
+*/
 	return results;
 }
