@@ -7,6 +7,7 @@
 
 #include "block_partition.cpp"
 #include "filter.cpp"
+#include "arithmatic_coding.cpp"
  
 using Eigen::MatrixXd;
 using namespace std;
@@ -19,7 +20,7 @@ int main(int argc, char **argv)
 
 	char *image_path = NULL;
 	float threshold = 10;
-	int block_width = 16, block_height = 16;
+	int block_width = 32, block_height = 32;
 
 	for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -40,8 +41,8 @@ int main(int argc, char **argv)
 
 	printf("image path: %s\n", image_path);
 	Mat img = imread(image_path);
-	imshow("image", img);
-	waitKey(0);
+	// imshow("image", img);
+	// waitKey(0);
 	// Quadtree quad(&img, img, threshold);
 	// printf("%dx%d\n", quad.quad_tree_image.rows, quad.quad_tree_image.cols);
 	// imshow("quad tree", quad.quad_tree_image);
@@ -54,11 +55,13 @@ int main(int argc, char **argv)
 	vector<Blocks> blocks = quad.get_blocks(img, coords);
 	cout<<"Number of blocks to process "<<blocks.size()<<"\n";
 
-	imshow("quad tree", quad.quad_tree_image);
+	// imshow("quad tree", quad.quad_tree_image);
 	imwrite("quad_tree_image.png", quad.quad_tree_image);
-	waitKey(0);
+	// waitKey(0);
 	
 	vector<Results> results = filter(blocks[54]);
+
+	arithmatic_code(results);
 
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;
