@@ -91,6 +91,7 @@ void defilter(Results result, Blocks *block, int *count)
 	Vec3b a, b;
 	a = block->img.at<Vec3b>(result.min_row_1, result.min_col_1);
 	b = block->img.at<Vec3b>(result.min_row_2, result.min_col_2);
+	result.min_dist = 0;
 	block->img.at<Vec3b>(result.y, result.x)[0] = result.min_dist + result.min_dist_alpha*a[0] + (1-result.min_dist_alpha)*b[0];
 	block->img.at<Vec3b>(result.y, result.x)[1] = result.min_dist + result.min_dist_alpha*a[1] + (1-result.min_dist_alpha)*b[1];
 	block->img.at<Vec3b>(result.y, result.x)[2] = result.min_dist + result.min_dist_alpha*a[2] + (1-result.min_dist_alpha)*b[2];
@@ -133,8 +134,8 @@ vector<Results> filter(Blocks block)
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
 
-	// imshow("img", block.img);
-	// imshow("new_img", new_img);
+	imshow("img", block.img);
+	imshow("new_img", new_img);
 	imwrite("block_img.png", block.img);
 	imwrite("block_img_after_filter.png", new_img);
 	// waitKey(0);
