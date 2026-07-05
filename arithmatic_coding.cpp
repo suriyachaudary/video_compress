@@ -11,6 +11,7 @@ Reference
 #include <sstream>
 #include <string>
 
+
 void arithmatic_code(vector<Results> result)
 {
     // Calculate total byte size
@@ -42,9 +43,9 @@ void arithmatic_code(vector<Results> result)
     vector<Results> restored(num_elements);
     memcpy(restored.data(), vec.data(), vec.size());
 
-    // Verify the data
-    for (const auto& item : restored) {
-        std::cout << "ID: " << item.x << ", Value: " << item.value << "\n";
-    }
+    // // Verify the data
+    // for (const auto& item : restored) {
+    //     std::cout << "ID: " << item.x << ", Value: " << item.value << "\n";
+    // }
 
 }
