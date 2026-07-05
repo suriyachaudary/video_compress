@@ -43,9 +43,10 @@ void arithmatic_code(vector<Results> result)
     vector<Results> restored(num_elements);
     memcpy(restored.data(), vec.data(), vec.size());
 
-    // // Verify the data
-    // for (const auto& item : restored) {
-    //     std::cout << "ID: " << item.x << ", Value: " << item.value << "\n";
-    // }
+    cout<<"Number of pixels restored "<<restored.size()<<"\n";
+    // Verify the data
+    for (int i=0;i<result.size();i++) {
+        cout << "ID: " << restored[i].x << ", Value: " << restored[i].value << "\n";
+    }
 
 }
