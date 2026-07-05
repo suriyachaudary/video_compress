@@ -44,7 +44,6 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	res.x = x;
 	res.y = y;
 	res.value = 0;
-
 	// 4 bits for position on the line
 	float alpha_step = 1.0/pow(2, 4);
 	float min_dist = numeric_limits<float>::max();
@@ -84,6 +83,7 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	}
 
 	results->at(*filter_count) = res;
+	*filter_count = *filter_count + 1;
 }
 
 void defilter(Results result, Blocks *block, int *count)
@@ -164,7 +164,7 @@ vector<Results> filter(Blocks block)
 		for(int j= 1;j<block.img.cols; j++)
 		{
 			for(int k=0;k<results.size();k++)
-			{
+			{	
 				if(results[k].x==j && results[k].y == i)
 				{
 					defilter(results[k], &reconstruct, &count);
