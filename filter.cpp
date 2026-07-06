@@ -22,28 +22,25 @@ Reference
 1. libpng
 2. https://www.youtube.com/watch?v=kfLE57ljoEE&t=15
 */
-
+#include<stdfloat>
 #include<cmath>
 #include<thread>
 #include<eigen-5.0.0/Eigen/Dense>
 
 struct Results{
-	int rows, cols;
-	int x, y;
-	int min_row_1, min_col_1;
-	int min_row_2, min_col_2;
+	unsigned char x, y;
+	unsigned char min_row_1, min_col_1;
+	unsigned char min_row_2, min_col_2;
 	float min_dist_alpha, min_dist;
-	float value;
+	// float value;
 };
 
 void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img, int *filter_count)
 {
 	Results res;
-	res.rows =  img->rows;
-	res.cols = img->cols;
 	res.x = x;
 	res.y = y;
-	res.value = 0;
+	// res.value = 0;
 	// 4 bits for position on the line
 	float alpha_step = 1.0/pow(2, 4);
 	float min_dist = numeric_limits<float>::max();
@@ -72,7 +69,7 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 					res.min_row_2 = k;
 					res.min_col_2 = l;
 
-					res.value = atan2((k-i), (l-j));
+					// res.value = atan2((k-i), (l-j));
 
 					new_img->at<Vec3b>(y, x)[0] = alpha*a[0] + (1-alpha)*b[0];
 					new_img->at<Vec3b>(y, x)[1] = alpha*a[1] + (1-alpha)*b[1];
