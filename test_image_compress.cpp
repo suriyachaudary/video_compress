@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
 	char *image_path = NULL;
 	float threshold = 10;
-	int block_width = 32, block_height = 32;
+	int block_width = 4, block_height = 4;
 
 	for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
