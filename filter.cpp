@@ -68,16 +68,18 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 					res.min_col_1 = j;
 					res.min_row_2 = k;
 					res.min_col_2 = l;
-
 					// res.value = atan2((k-i), (l-j));
-
-					new_img->at<Vec3b>(y, x)[0] = alpha*a[0] + (1-alpha)*b[0];
-					new_img->at<Vec3b>(y, x)[1] = alpha*a[1] + (1-alpha)*b[1];
-					new_img->at<Vec3b>(y, x)[2] = alpha*a[2] + (1-alpha)*b[2];
 				}
 			}
 		}
 	}
+
+	Vec3b a = img->at<Vec3b>(res.min_row_1,res.min_col_1);
+	Vec3b b = img->at<Vec3b>(res.min_row_2,res.min_col_2 );
+
+	new_img->at<Vec3b>(y, x)[0] = res.min_dist_alpha*a[0] + (1-res.min_dist_alpha)*b[0];
+	new_img->at<Vec3b>(y, x)[1] = res.min_dist_alpha*a[1] + (1-res.min_dist_alpha)*b[1];
+	new_img->at<Vec3b>(y, x)[2] = res.min_dist_alpha*a[2] + (1-res.min_dist_alpha)*b[2];
 
 	results->at(*filter_count) = res;
 	*filter_count = *filter_count + 1;
@@ -101,7 +103,19 @@ vector<Results> filter(Blocks block)
 	vector<Results> results((block.img.rows-1)*(block.img.cols-1));
 	vector<thread> workers;
 
-	Mat new_img = block.img.clone();
+	Mat new_img = Mat::zeros(block.img.rows, block.img.cols, CV_8UC3);
+
+	for(int i=0;i<block.img.rows; i++)
+	{
+		for(int j= 0;j<block.img.cols; j++)
+		{
+			Vec3b value = block.img.at<Vec3b>(i,j);
+			if(i==0 || j ==  0)
+			{
+				new_img.at<Vec3b>(i, j) = value;
+			}
+		}
+	}
 
 	int num_threads = thread::hardware_concurrency();
 	cout<<"Number of possible threads "<<num_threads<<"\n";
@@ -117,9 +131,7 @@ vector<Results> filter(Blocks block)
 		{
 			Vec3b value = block.img.at<Vec3b>(i,j);
 			workers.push_back(thread(find_basis, &(block.img), value, i, j, &results, &new_img, &filter_count));
-			// break;
 		}
-		 // break;
 	}
 
 	for(auto& w : workers)
@@ -169,21 +181,6 @@ vector<Results> filter(Blocks block)
 			}
 		}
 	}
-
-	// reconstruct all pixels in the block concurrently.
-
-	// for(int i=0;i<results.size();i++)
-	// {
-		// workers.push_back(thread(defilter, results[i], &reconstruct, &count));
-	// }
-
-	// for(auto& w : workers)
-	// {
-		// if(w.joinable())
-		// {
-			// w.join();
-		// }
-	// }
 
 	cout<<"Number of pixels reconstructed "<<count<<"\n";
 
