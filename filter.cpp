@@ -33,6 +33,7 @@ struct Results{
 	unsigned char min_row_2, min_col_2;
 	float min_dist_alpha;
 	unsigned char min_dist_r, min_dist_g, min_dist_b;
+	// float value;
 };
 
 void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img, int *filter_count)
@@ -41,8 +42,8 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	res.x = x;
 	res.y = y;
 	// res.value = 0;
-	// 4 bits for position on the line
-	float alpha_step = 1.0/pow(2, 4);
+	// 2 bits for position on the line
+	float alpha_step = 1.0/pow(2, 2);
 	float min_dist = numeric_limits<float>::max();
 	
 	for(int i=y-1, j=x-1;j<img->cols;j++)
