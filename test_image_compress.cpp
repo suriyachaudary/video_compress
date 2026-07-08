@@ -55,13 +55,17 @@ int main(int argc, char **argv)
 	vector<Blocks> blocks = quad.get_blocks(img, coords);
 	cout<<"Number of blocks to process "<<blocks.size()<<"\n";
 
-	// imshow("quad tree", quad.quad_tree_image);
+	imshow("quad tree", quad.quad_tree_image);
 	imwrite("quad_tree_image.png", quad.quad_tree_image);
-	// waitKey(0);
+	waitKey(0);
 	
-	vector<Results> results = filter(blocks[54]);
+	for(int i = 0; i < blocks.size(); i++)
+	{
+		vector<Results> results = filter(blocks[i]);
 
-	arithmatic_code(results);
+		arithmatic_code(results);
+		break;
+	}
 
 	MatrixXd m(2, 2);
   	m(0, 0) = 3;

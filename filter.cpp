@@ -31,9 +31,8 @@ struct Results{
 	unsigned char x, y;
 	unsigned char min_row_1, min_col_1;
 	unsigned char min_row_2, min_col_2;
-	float min_dist_alpha, min_dist;
-	float min_dist_r, min_dist_g, min_dist_b;
-	// float value;
+	float min_dist_alpha;
+	unsigned char min_dist_r, min_dist_g, min_dist_b;
 };
 
 void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img, int *filter_count)
@@ -63,7 +62,6 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 				if(dist < min_dist)
 				{	
 					min_dist = dist;
-					res.min_dist = min_dist;
 					res.min_dist_alpha = alpha;
 					res.min_row_1 = i;
 					res.min_col_1 = j;
@@ -95,7 +93,6 @@ void defilter(Results result, Blocks *block, int *count)
 	Vec3b a, b;
 	a = block->img.at<Vec3b>(result.min_row_1, result.min_col_1);
 	b = block->img.at<Vec3b>(result.min_row_2, result.min_col_2);
-	result.min_dist = 0;
 	block->img.at<Vec3b>(result.y, result.x)[0] = result.min_dist_b + result.min_dist_alpha*a[0] + (1-result.min_dist_alpha)*b[0];
 	block->img.at<Vec3b>(result.y, result.x)[1] = result.min_dist_g + result.min_dist_alpha*a[1] + (1-result.min_dist_alpha)*b[1];
 	block->img.at<Vec3b>(result.y, result.x)[2] = result.min_dist_r + result.min_dist_alpha*a[2] + (1-result.min_dist_alpha)*b[2];
