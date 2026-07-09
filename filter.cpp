@@ -22,18 +22,17 @@ Reference
 1. libpng
 2. https://www.youtube.com/watch?v=kfLE57ljoEE&t=15
 */
-#include<stdfloat>
+
 #include<cmath>
 #include<thread>
 #include<eigen-5.0.0/Eigen/Dense>
 
 struct Results{
 	unsigned char x, y;
-	unsigned char min_row_1, min_col_1;
-	unsigned char min_row_2, min_col_2;
+	unsigned char min_col_1;
+	unsigned char min_row_2;
 	float min_dist_alpha;
-	unsigned char min_dist_r, min_dist_g, min_dist_b;
-	// float value;
+	unsigned char min_dist_r=0, min_dist_g=0, min_dist_b = 0;
 };
 
 void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, Mat *new_img, int *filter_count)
@@ -45,10 +44,12 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	// 2 bits for position on the line
 	float alpha_step = 1.0/pow(2, 2);
 	float min_dist = numeric_limits<float>::max();
+	unsigned char min_row_1 = y-1;
+	unsigned char min_col_2 = x-1;
 	
-	for(int i=y-1, j=x-1;j<img->cols;j++)
+	for(int i=y-1, j=x-1;j<img->cols;j+=4)
 	{
-		for(int k=y, l=x-1;k<img->rows;k++)
+		for(int k=y, l=x-1;k<img->rows;k+=4)
 		{
 			for(float alpha = 0; alpha<=1; alpha+=alpha_step)
 			{
@@ -64,10 +65,10 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 				{	
 					min_dist = dist;
 					res.min_dist_alpha = alpha;
-					res.min_row_1 = i;
+					// res.min_row_1 = i;
 					res.min_col_1 = j;
 					res.min_row_2 = k;
-					res.min_col_2 = l;
+					// res.min_col_2 = l;
 
 					res.min_dist_b = value[0] - (alpha*a[0] + (1-alpha)*b[0]);
 					res.min_dist_g = value[1] - (alpha*a[1] + (1-alpha)*b[1]);
@@ -78,8 +79,8 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 		}
 	}
 
-	Vec3b a = img->at<Vec3b>(res.min_row_1,res.min_col_1);
-	Vec3b b = img->at<Vec3b>(res.min_row_2,res.min_col_2 );
+	Vec3b a = img->at<Vec3b>(min_row_1,res.min_col_1);
+	Vec3b b = img->at<Vec3b>(res.min_row_2,min_col_2 );
 
 	new_img->at<Vec3b>(y, x)[0] = res.min_dist_alpha*a[0] + (1-res.min_dist_alpha)*b[0];
 	new_img->at<Vec3b>(y, x)[1] = res.min_dist_alpha*a[1] + (1-res.min_dist_alpha)*b[1];
@@ -92,8 +93,10 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 void defilter(Results result, Blocks *block, int *count)
 {
 	Vec3b a, b;
-	a = block->img.at<Vec3b>(result.min_row_1, result.min_col_1);
-	b = block->img.at<Vec3b>(result.min_row_2, result.min_col_2);
+	unsigned char min_row_1 = result.y-1;
+	unsigned char min_col_2 = result.x-1;
+	a = block->img.at<Vec3b>(min_row_1, result.min_col_1);
+	b = block->img.at<Vec3b>(result.min_row_2, min_col_2);
 	block->img.at<Vec3b>(result.y, result.x)[0] = result.min_dist_b + result.min_dist_alpha*a[0] + (1-result.min_dist_alpha)*b[0];
 	block->img.at<Vec3b>(result.y, result.x)[1] = result.min_dist_g + result.min_dist_alpha*a[1] + (1-result.min_dist_alpha)*b[1];
 	block->img.at<Vec3b>(result.y, result.x)[2] = result.min_dist_r + result.min_dist_alpha*a[2] + (1-result.min_dist_alpha)*b[2];
