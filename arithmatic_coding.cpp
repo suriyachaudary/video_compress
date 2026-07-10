@@ -3,8 +3,7 @@ Takes filter result and return arithmatic code of the block.
 
 
 Reference
-1. https://github.com/billbird/arith32
-2. gemini
+1. gemini
 */
 
 #include <dlib/compress_stream.h>

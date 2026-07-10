@@ -25,7 +25,6 @@ Reference
 
 #include<cmath>
 #include<thread>
-#include<eigen-5.0.0/Eigen/Dense>
 
 struct Results{
 	unsigned char x, y;
@@ -40,19 +39,17 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	Results res;
 	res.x = x;
 	res.y = y;
-	// res.value = 0;
-	// 2 bits for position on the line
+	// 4 bits for position on the line
 	float alpha_step = 1.0/pow(2, 4);
 	float min_dist = numeric_limits<float>::max();
 	unsigned char min_row_1 = y-1;
 	unsigned char min_col_2 = x-1;
 	
-	for(int i=y-1, j=x-1;j<img->cols;j+=4)
+	for(int i=y-1, j=x-1;j<img->cols;j+=1)
 	{
-		for(int k=y, l=x-1;k<img->rows;k+=4)
+		for(int k=y, l=x-1;k<img->rows;k+=1)
 		{
-			float alpha_=0;
-			for(float alpha = 0; alpha<=1; alpha+=alpha_step, alpha_+=1)
+			for(float alpha = 0, alpha_=0; alpha<=1; alpha+=alpha_step, alpha_+=1)
 			{
 				Vec3b a, b;
 				a = img->at<Vec3b>(i,j);
@@ -66,15 +63,12 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 				{	
 					min_dist = dist;
 					res.min_dist_alpha = alpha_;
-					// res.min_row_1 = i;
 					res.min_col_1 = j;
 					res.min_row_2 = k;
-					// res.min_col_2 = l;
 
 					res.min_dist_b = value[0] - (alpha*a[0] + (1-alpha)*b[0]);
 					res.min_dist_g = value[1] - (alpha*a[1] + (1-alpha)*b[1]);
 					res.min_dist_r = value[2] - (alpha*a[2] + (1-alpha)*b[2]);
-					// res.value = atan2((k-i), (l-j));
 				}
 			}
 		}
