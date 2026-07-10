@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 	for(int i = 0; i < blocks.size(); i++)
 	{
 		vector<Results> results = filter(blocks[i]);
-
+		cout<<"Raw memory "<<blocks[i].img.total()*blocks[i].img.elemSize()<<" bytes\n";
 		arithmatic_code(results);
 		break;
 	}
