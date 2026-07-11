@@ -53,6 +53,7 @@ int main(int argc, char **argv)
 	quad.set_threshold(threshold, block_width, block_height);
 	vector<Mat> coords;
 	vector<Blocks> blocks = quad.get_blocks(img, coords);
+	writer.release();
 	cout<<"Number of blocks to process "<<blocks.size()<<"\n";
 
 	imshow("quad tree", quad.quad_tree_image);
@@ -66,6 +67,7 @@ int main(int argc, char **argv)
 		arithmatic_code(results);
 		break;
 	}
+
 
 	return 0;
 }

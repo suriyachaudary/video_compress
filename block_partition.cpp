@@ -25,6 +25,9 @@ struct Blocks{
 	Rect region_in_image;
 };
 
+int fourcc = VideoWriter::fourcc('m', 'p', '4', 'v'); 
+VideoWriter writer;
+
 class Quadtree2{
 	float block_mean=0, block_std_dev = 0, threshold = 10;
 	int block_width = 0, block_height = 0;
@@ -54,6 +57,11 @@ class Quadtree2{
 		
 		if(quad == -1)
 		{
+			writer.open("block_partitioning.mp4", fourcc, 120, img.size(), true);
+			if (!writer.isOpened()) {
+        		cerr << "Error: Could not open the video writer for output.\n";
+    		}
+
 			coords = create_mesh_grid(img.rows, img.cols);	
 			block = image;
 			quad_tree_image = img.clone();
@@ -129,12 +137,16 @@ class Quadtree2{
 		}else{
 	
 		rectangle(quad_tree_image, region_in_image, Scalar(255,255,255), 0.01);
+		writer.write(quad_tree_image); 
+		// imshow("quad_tree_image", quad_tree_image);
+		// waitKey(1);
 		
 		Blocks block_temp;
 		block_temp.img = block;
 		block_temp.region_in_image = region_in_image;
 		blocks.push_back(block_temp);
 	}
+		
 		return blocks;
 	}
 };
