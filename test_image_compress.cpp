@@ -9,7 +9,6 @@
 #include "filter.cpp"
 #include "arithmatic_coding.cpp"
  
-using Eigen::MatrixXd;
 using namespace std;
 using namespace cv;
 
@@ -40,7 +39,8 @@ int main(int argc, char **argv)
     // from gemini
 
 	printf("image path: %s\n", image_path);
-	Mat img = imread(image_path);
+	Mat img = imread(image_path, IMREAD_UNCHANGED);
+	cout<<"Image Depth "<<img.depth()<<"\n";
 	// imshow("image", img);
 	// waitKey(0);
 	// Quadtree quad(&img, img, threshold);
