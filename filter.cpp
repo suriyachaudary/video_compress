@@ -45,9 +45,9 @@ void find_basis(Mat *img, Vec3b value, int y, int x, vector<Results> *results, M
 	unsigned char min_row_1 = y-1;
 	unsigned char min_col_2 = x-1;
 	
-	for(int i=y-1, j=x-1;j<img->cols;j+=1)
+	for(int i=y-1, j=x-1;j<img->cols && j -x < 10 ;j+=1)
 	{
-		for(int k=y, l=x-1;k<img->rows;k+=1)
+		for(int k=y, l=x-1;k<img->rows && k-y < 10 ;k+=1)
 		{
 			for(float alpha = 0, alpha_=0; alpha<=1; alpha+=alpha_step, alpha_+=1)
 			{
@@ -102,7 +102,7 @@ void defilter(Results result, Blocks *block, int *count)
 	*count = *count+1;
 }
 
-vector<Results> filter(Blocks block)
+vector<Results> filter(Blocks block, Mat *canvas)
 {	
 	vector<Results> results((block.img.rows-1)*(block.img.cols-1));
 	vector<thread> workers;
@@ -148,8 +148,10 @@ vector<Results> filter(Blocks block)
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
 
-	imwrite("block_img.png", block.img);
-	imwrite("block_img_after_filter.png", new_img);
+	// imwrite("block_img.png", block.img);
+	// imwrite("block_img_after_filter.png", new_img);
+	// imshow("block_img.png", block.img);
+	// imshow("block_img_after_filter.png", new_img);
 
 	Blocks reconstruct;
 	int count = 0;
@@ -185,7 +187,11 @@ vector<Results> filter(Blocks block)
 
 	cout<<"Number of pixels reconstructed "<<count<<"\n";
 
-	imwrite("reconstructed_block.png", reconstruct.img);
+	// imwrite("reconstructed_block.png", reconstruct.img);
+	// imshow("reconstructed_block.png", reconstruct.img);
+	reconstruct.img.copyTo((*canvas)(block.region_in_image));
+	// imshow("canvas", *canvas);
+	// waitKey(1);
 
 	return results;
 }

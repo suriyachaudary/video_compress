@@ -49,14 +49,18 @@ int main(int argc, char **argv)
 	cout<<"Number of blocks to process "<<blocks.size()<<"\n";
 
 	imwrite("quad_tree_image.png", quad.quad_tree_image);
+
+	Mat canvas = Mat::zeros(img.rows, img.cols, CV_8UC3);
 	
 	for(int i = 0; i < blocks.size(); i++)
 	{
-		vector<Results> results = filter(blocks[i]);
+		vector<Results> results = filter(blocks[i], &canvas);
 		cout<<"Raw memory "<<blocks[i].img.total()*blocks[i].img.elemSize()<<" bytes\n";
 		arithmatic_code(results);
-		break;
+		// break;
 	}
+
+	imwrite("reconstructed_image.png", canvas);
 
 
 	return 0;

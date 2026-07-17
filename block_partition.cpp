@@ -96,7 +96,7 @@ class Quadtree2{
 
 
 		region_in_image = Rect(Point(coords[0].at<float>(0,0) -1, coords[1].at<float>(0,0) -1),
-		 Point(coords[0].at<float>(coords[0].rows -1,coords[0].cols-1)-1, coords[1].at<float>(coords[1].rows-1,coords[1].cols-1)-1));
+		 Point(coords[0].at<float>(coords[0].rows -1,coords[0].cols-1), coords[1].at<float>(coords[1].rows-1,coords[1].cols-1)));
 		block_width = block.cols;
 		block_height = block.rows;
 		Scalar mean, standard_deviation;
@@ -135,7 +135,7 @@ class Quadtree2{
 		}else{
 	
 		rectangle(quad_tree_image, region_in_image, Scalar(255,255,255), 0.01);
-		writer.write(quad_tree_image); 
+		// writer.write(quad_tree_image); 
 		Blocks block_temp;
 		block_temp.img = block;
 		block_temp.region_in_image = region_in_image;
