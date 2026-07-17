@@ -148,11 +148,8 @@ vector<Results> filter(Blocks block)
 
 	cout<<"Number of pixels processed "<<results.size()<<"\n";
 
-	imshow("img", block.img);
-	imshow("new_img", new_img);
 	imwrite("block_img.png", block.img);
 	imwrite("block_img_after_filter.png", new_img);
-	waitKey(0);
 
 	Blocks reconstruct;
 	int count = 0;
@@ -189,8 +186,6 @@ vector<Results> filter(Blocks block)
 	cout<<"Number of pixels reconstructed "<<count<<"\n";
 
 	imwrite("reconstructed_block.png", reconstruct.img);
-	imshow("reconstructed_block.png", reconstruct.img);
-	waitKey(0);
 
 	return results;
 }

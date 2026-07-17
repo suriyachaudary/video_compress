@@ -44,9 +44,5 @@ void arithmatic_code(vector<Results> result)
     memcpy(restored.data(), decompressed_stream.str().data(), decompressed_stream.str().size());
 
     cout<<"Number of pixels restored "<<restored.size()<<"\n";
-    // Verify the data
-    // for (int i=0;i<result.size();i++) {
-        // cout << "ID: " << restored[i].x << ", Value: " << restored[i].value << "\n";
-    // }
 
 }

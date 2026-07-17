@@ -14,7 +14,6 @@ using namespace cv;
 
 int main(int argc, char **argv)
 {
-	// from gemini
 	bool verbose = false;
 
 	char *image_path = NULL;
@@ -36,17 +35,10 @@ int main(int argc, char **argv)
         }
     }
 
-    // from gemini
 
 	printf("image path: %s\n", image_path);
 	Mat img = imread(image_path, IMREAD_UNCHANGED);
 	cout<<"Image Depth "<<img.depth()<<"\n";
-	// imshow("image", img);
-	// waitKey(0);
-	// Quadtree quad(&img, img, threshold);
-	// printf("%dx%d\n", quad.quad_tree_image.rows, quad.quad_tree_image.cols);
-	// imshow("quad tree", quad.quad_tree_image);
-	// waitKey(0);
 
 	Quadtree2 quad;
 	quad.set_image(img, 255*Mat::ones(img.rows, img.cols, CV_8UC3));
@@ -56,9 +48,7 @@ int main(int argc, char **argv)
 	writer.release();
 	cout<<"Number of blocks to process "<<blocks.size()<<"\n";
 
-	imshow("quad tree", quad.quad_tree_image);
 	imwrite("quad_tree_image.png", quad.quad_tree_image);
-	waitKey(0);
 	
 	for(int i = 0; i < blocks.size(); i++)
 	{
