@@ -1,11 +1,16 @@
 # video_compress
 
 Block parition
+
 ![Block partition](https://github.com/suriyachaudary/video_compress/blob/main/quad_tree_image.png)
 
 
-Block Image | Block image after filtering
+Block Image
+
 ![Block image](https://github.com/suriyachaudary/video_compress/blob/main/block_img.png)
+
+Block image after filtering
+
 ![Block image after filter](https://github.com/suriyachaudary/video_compress/blob/main/block_img_after_filter.png)
 
 
