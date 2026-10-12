@@ -1,4 +1,8 @@
-# video_compress
+# Custom H.265 / HEVC Video Compression Codec in C++
+
+A lightweight, modular, and high-performance implementation of an H.265 (High Efficiency Video Coding) inspired video compression codec written from scratch in **C++** using **OpenCV**.
+
+
 
 Block parition
 
